@@ -1,5 +1,7 @@
-from flask import Flask
-from models import db
+from flask import Flask, request
+from sqlalchemy.exc import NoResultFound
+
+from models import db, Email
 
 app = Flask(__name__)
 
@@ -21,7 +23,11 @@ def insert_email():
 
 @app.route('/blacklists/<string:email>', methods=['GET'])
 def find_email(email):
-    return 'DevOps'
+    try:
+        result = db.session.query(Email).filter(Email.email == email).one()
+    except NoResultFound:
+        return {"message": "El email no esta registrado en la lista negra"}, 404
+    return {"message": "Found Email"}, 200
 
 
 if __name__ == '__main__':
