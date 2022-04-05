@@ -11,6 +11,11 @@ def main():
 
 @app.route('/blacklists', methods=['POST'])
 def insert_email():
+    laIp = "127.0.0.1"
+    email_new = Email(app_uuid= 123456, email=request.json["email"], blocked_reason=request.json["blocked_reason"],
+    ip_client=laIp, date_create=request.json["date_create"])
+    db.session.add(email_new)
+    db.session.commit()
     return {"message": "Email create"}, 200
 
 
