@@ -1,6 +1,6 @@
 from flask import request
 from sqlalchemy.exc import NoResultFound, IntegrityError
-from DevOps import create_app
+from . import create_app
 import socket
 from models import Email, db
 
