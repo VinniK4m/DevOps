@@ -1,10 +1,10 @@
-from flask import Flask, request
+from flask import request
 from sqlalchemy.exc import NoResultFound, IntegrityError
+from DevOps import create_app
 import socket
+from models import Email, db
 
-from models import db, Email
-
-app = Flask(__name__)
+app = create_app('default')
 app_context = app.app_context()
 app_context.push()
 
@@ -61,9 +61,3 @@ def find_email(email):
         return {"message": "Found Email"}, 200
     except NoResultFound:
         return {"message": "El email no esta registrado en la lista negra"}, 404
-
-
-if __name__ == '__main__':
-    app.run(
-        host="0.0.0.0", port=3000, debug=True
-    )

@@ -9,7 +9,7 @@ db = SQLAlchemy()
 class Email(db.Model):
     __tablename__ = "email"
 
-    email = Column(db.String(128),primary_key=True, unique=True)
+    email = Column(db.String(128), primary_key=True, unique=True)
     app_uuid = Column(db.Integer)
     blocked_reason = Column(db.String(255))
     ip_client = Column(db.String(50))
