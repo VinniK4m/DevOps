@@ -18,15 +18,23 @@ db.create_all()
 def main():
     return 'DevOps'
 
+def authorized(sesion_id):
+    sesion_base = 123456789
+    if sesion_base == sesion_id:
+        return True
+    return False
+
+
 
 @app.route('/blacklists/', methods=['POST'])
 def insert_email():
-
-    laIp = extract_ip()
-    email_new = Email(app_uuid= 123456, email=request.json["email"], blocked_reason=request.json["blocked_reason"],
-    ip_client=laIp)
-    db.session.add(email_new)
-    db.session.commit()
+    sesion_id = request.headers.get('Authorization')
+    if not authorized(sesion_id):
+        laIp = extract_ip()
+        email_new = Email(app_uuid= 123456, email=request.json["email"], blocked_reason=request.json["blocked_reason"],
+        ip_client=laIp)
+        db.session.add(email_new)
+        db.session.commit()
     return {"message": "Email create"}, 200
 
 
