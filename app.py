@@ -1,5 +1,5 @@
 from flask import Flask, request
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound, IntegrityError
 import socket
 
 from models import db, Email
@@ -43,8 +43,11 @@ def insert_email():
         return {"message": "Not authorized"}, 401
     email_new = Email(app_uuid=123456, email=request.json["email"], blocked_reason=request.json["blocked_reason"],
                       ip_client=extract_ip())
-    db.session.add(email_new)
-    db.session.commit()
+    try:
+        db.session.add(email_new)
+        db.session.commit()
+    except IntegrityError:
+        return {"message": "Email not created Integrity Error"}, 404
     return {"message": "Email created"}, 200
 
 
