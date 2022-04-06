@@ -19,7 +19,7 @@ def main():
 
 
 def authorized(sesion_id):
-    sesion_base = 123456789
+    sesion_base = '123456789'
     if sesion_base == sesion_id:
         return True
     return False
