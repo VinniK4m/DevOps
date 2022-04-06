@@ -2,9 +2,17 @@ from flask import Flask, request
 from sqlalchemy.exc import NoResultFound
 import socket
 
+
 from models import db, Email
 
+
 app = Flask(__name__)
+app_context = app.app_context()
+app_context.push()
+
+db.init_app(app)
+
+db.create_all()
 
 @app.route('/')
 def main():
@@ -41,9 +49,11 @@ def extract_ip():
         st.close()
     return IP
 
+
 if __name__ == '__main__':
     app.run(
         host="0.0.0.0", port=3000, debug=True
     )
+
 
 
