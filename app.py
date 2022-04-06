@@ -17,6 +17,7 @@ db.create_all()
 def main():
     return 'DevOps'
 
+
 def authorized(sesion_id):
     sesion_base = 123456789
     if sesion_base == sesion_id:
@@ -24,52 +25,39 @@ def authorized(sesion_id):
     return False
 
 
-
 @app.route('/blacklists/', methods=['POST'])
 def insert_email():
+    def extract_ip():
+        st = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            st.connect(('10.255.255.255', 1))
+            IP = st.getsockname()[0]
+        except Exception:
+            IP = '127.0.0.1'
+        finally:
+            st.close()
+        return IP
+
     sesion_id = request.headers.get('Authorization')
     if not authorized(sesion_id):
-        laIp = extract_ip()
-        email_new = Email(app_uuid= 123456, email=request.json["email"], blocked_reason=request.json["blocked_reason"],
-        ip_client=laIp)
-        db.session.add(email_new)
-        db.session.commit()
-    return {"message": "Email create"}, 200
-
-
-@app.route('/blacklists/<string:email>', methods=['GET'])
-def find_email(email):
-    try:
-        result = db.session.query(Email).filter(Email.email == email).one()
-    except NoResultFound:
-        return {"message": "El email no esta registrado en la lista negra"}, 404
-    return {"message": "Found Email"}, 200
-
-def extract_ip():
-    st = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        st.connect(('10.255.255.255', 1))
-        IP = st.getsockname()[0]
-    except Exception:
-        IP = '127.0.0.1'
-    finally:
-        st.close()
-    return IP
-
+        return {"message": "Not authorized"}, 401
     email_new = Email(app_uuid=123456, email=request.json["email"], blocked_reason=request.json["blocked_reason"],
                       ip_client=extract_ip())
     db.session.add(email_new)
     db.session.commit()
-    return {"message": "Email create"}, 200
+    return {"message": "Email created"}, 200
 
 
 @app.route('/blacklists/<string:email>', methods=['GET'])
 def find_email(email):
+    sesion_id = request.headers.get('Authorization')
+    if not authorized(sesion_id):
+        return {"message": "Not authorized"}, 401
     try:
         db.session.query(Email).filter(Email.email == email).one()
+        return {"message": "Found Email"}, 200
     except NoResultFound:
         return {"message": "El email no esta registrado en la lista negra"}, 404
-    return {"message": "Found Email"}, 200
 
 
 if __name__ == '__main__':
