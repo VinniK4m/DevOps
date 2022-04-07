@@ -1,8 +1,23 @@
+import os
+
 from flask import request
 from sqlalchemy.exc import NoResultFound, IntegrityError
-from . import create_app
 import socket
 from models import Email, db
+from flask import Flask
+
+hostname = os.environ['RDS_HOST']
+user = os.environ['RDS_USERNAME']
+password = os.environ['RDS_PASSWORD']
+dbname = os.environ['RDS_DATABASE']
+
+
+def create_app(config_name):
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{user}:{password}@{hostname}/{dbname}'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    return app
+
 
 application = create_app('application')
 app_context = application.app_context()
@@ -61,3 +76,7 @@ def find_email(email):
         return {"message": "Found Email"}, 200
     except NoResultFound:
         return {"message": "El email no esta registrado en la lista negra"}, 404
+
+
+if __name__ == "__main__":
+    application.run(port=5000, debug=True)
