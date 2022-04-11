@@ -9,16 +9,5 @@ Para  realizar  la  implementación  inicial  del  microservicio,  es  necesario
 
 2.(25%) Desarrollar y exponer un servicio REST (GET) para consultar si un email está en la lista negra global o no. Este microservicio recibe como parámetro el email del cliente y retorna si ese email está en la lista negra global o no.
 
-## Consideraciones para la ejecución en AWS
-
-### Servicios 
-#### Infraestructura y arquitectura 
-#### EC2
-#### RDS
-
-
-### Consideraciones 
-
-
 ## Definición API REST
-https://documenter.getpostman.com/view/15381667/UV5ahGkB#c141ccaa-66ee-4473-9097-e9b1d5a47b0d
+https://documenter.getpostman.com/view/5687446/UVyysCSn
