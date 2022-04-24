@@ -1,6 +1,6 @@
 import os
 
-from flask import request
+from flask import request, Blueprint
 from sqlalchemy.exc import NoResultFound, IntegrityError
 import socket
 from models import Email, db
@@ -16,6 +16,7 @@ def create_app(config_name):
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{user}:{password}@{hostname}/{dbname}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.register_blueprint(Blueprint('main', __name__, url_prefix='/'))
     return app
 
 
