@@ -1,7 +1,7 @@
 import pytest
-from application import authorized
+from application import authorized, find_email
 from application import application
-from models import Email
+from models import Email, db
 import tempfile
 import os
 
@@ -19,15 +19,17 @@ class TestApplication:
         assert authorized(red_sesion) is False
         assert authorized(green_sesion) is True
 
-    @pytest.mark.skip()
-    def test_insert_email(self):
-        # Todo: Implement
-        pass
+    def test_insert_email(self, client):
+        test_data = {'email': 'test@test.com', 'blocked_reason': 'test'}
+        response = client.post(f'/blacklists/', json=test_data, headers={"Authorization": "123456789"})
+        assert response.status_code == 200
+        db.session.query(Email).filter(Email.email == test_data['email']).delete()
+        db.session.commit()
 
-    @pytest.mark.skip()
-    def test_find_email(self):
-        # Todo: Implement
-        pass
+    def test_find_email(self, client):
+        test_email = 'email@2'
+        response = client.get(f'/blacklists/{test_email}', headers={"Authorization": "123456789"})
+        assert response.status_code == 200
 
     def test_main(self, client):
         response = client.get('/')
