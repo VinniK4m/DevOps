@@ -1,9 +1,8 @@
 import pytest
-from application import authorized, find_email
+from application import authorized
 from application import application
 from models import Email, db
-import tempfile
-import os
+
 
 
 @pytest.fixture
@@ -27,9 +26,12 @@ class TestApplication:
         db.session.commit()
 
     def test_find_email(self, client):
-        test_email = 'email@2'
-        response = client.get(f'/blacklists/{test_email}', headers={"Authorization": "123456789"})
+        test_email = Email(email='test_find_email@test.com', blocked_reason='test')
+        db.session.add(test_email)
+        db.session.commit()
+        response = client.get(f'/blacklists/{test_email.email}', headers={"Authorization": "123456789"})
         assert response.status_code == 200
+        db.session.query(Email).filter(Email.email == test_email.email).delete()  # Dispose
 
     def test_main(self, client):
         response = client.get('/')
@@ -37,10 +39,5 @@ class TestApplication:
         assert b"DevOps" in response.data
 
     def test_new_email_model(self):
-        """
-        GIVEN a Email model
-        WHEN a new User is created
-        THEN check the email
-        """
         user = Email(email='patkennedy79@gmail.com')
         assert user.email == 'patkennedy79@gmail.com'
