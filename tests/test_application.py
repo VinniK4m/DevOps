@@ -1,5 +1,5 @@
 import pytest
-from application import authorized, application, db
+from application import authorized, application
 from models import Email, db
 
 
