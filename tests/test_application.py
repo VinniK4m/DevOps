@@ -1,12 +1,11 @@
 import pytest
-from application import authorized
-from application import application
+from application import authorized, application, db
 from models import Email, db
-
 
 
 @pytest.fixture
 def client():
+    db.create_all()
     return application.test_client()
 
 
