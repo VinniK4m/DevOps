@@ -27,11 +27,11 @@ class TestApplication:
 
     def test_find_email(self, client):
         test_email = Email(email='test_find_email@test.com', blocked_reason='test')
+        db.session.query(Email).filter(Email.email == test_email.email).delete()  # Dispose
         db.session.add(test_email)
         db.session.commit()
         response = client.get(f'/blacklists/{test_email.email}', headers={"Authorization": "123456789"})
         assert response.status_code == 200
-        db.session.query(Email).filter(Email.email == test_email.email).delete()  # Dispose
 
     def test_main(self, client):
         response = client.get('/')
