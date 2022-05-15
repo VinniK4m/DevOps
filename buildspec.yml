@@ -9,7 +9,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t blacklist .
+      - docker build --build-arg RDS_HOST=$RDS_HOST --build-arg RDS_DATABASE=$RDS_DATABASE --build-arg RDS_PASSWORD=$RDS_PASSWORD --build-arg RDS_USERNAME=$RDS_USERNAME -t blacklist .
       - docker tag blacklist:latest 259687664332.dkr.ecr.us-east-1.amazonaws.com/blacklist:latest
   post_build:
     commands:

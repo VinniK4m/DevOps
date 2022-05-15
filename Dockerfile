@@ -5,6 +5,10 @@ RUN apk add py3-pip \
 WORKDIR /app
 COPY . /app/
 RUN pip install -r requirements.txt --ignore-installed
+ARG RDS_HOST
+ARG RDS_DATABASE
+ARG RDS_PASSWORD
+ARG RDS_USERNAME
 RUN python3 -m pytest
 
 EXPOSE 5000
