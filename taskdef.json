@@ -9,7 +9,7 @@
             "containerPort": 5000
           }
         ],
-        "image": "blacklist:latest",
+        "image": "<IMAGE1_NAME>",
         "essential": true,
         "name": "container-blacklist-ver02"
       }
