@@ -11,10 +11,15 @@
         ],
         "image": "<IMAGE1_NAME>",
         "essential": true,
-        "name": "container-blacklist-ver02"
+        "name": "container-blacklist-ver02",
+        "environmentFiles": [
+                {
+                    "value": "arn:aws:s3:::blacklists3/.env",
+                    "type": "s3"
+                }
+            ]
       }
     ],
-
     "requiresCompatibilities": [
       "FARGATE"
     ],
