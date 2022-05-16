@@ -13,7 +13,7 @@ class TestApplication:
 
     def test_authorized(self):
         red_sesion = '123'
-        green_sesion = '12345678'
+        green_sesion = '123456789'
         assert authorized(red_sesion) is False
         assert authorized(green_sesion) is True
 
